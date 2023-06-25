@@ -1,4 +1,4 @@
-const { User } = require("../models");
+const { User, Book } = require("../models");
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
@@ -31,6 +31,27 @@ const resolvers = {
 
             const token = signToken(user);
             return { token, user };
+        },
+        saveBook: async (parent, {userEmail, authors, description, bookId, image, link, title}) => {
+            return User.findOneAndUpdate(
+                {email: userEmail},
+                {
+                    $addToSet: {
+                        savedBooks: {
+                            authors,
+                            description,
+                            bookId,
+                            image,
+                            link,
+                            title
+                        }
+                    }
+                },
+                {
+                    new: true,
+                    runValidators: true
+                }
+            );
         }
     }
 };
