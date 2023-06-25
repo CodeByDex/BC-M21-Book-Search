@@ -5,14 +5,15 @@ const routes = require('./routes');
 
 const {ApolloServer} = require("apollo-server-express")
 const { typeDefs, resolvers } = require("./schemas");
-const { authMiddleware } = require('./utils/auth2');
+const { authMiddleware } = require('./utils/auth');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: authMiddleware
+  //TODO: fix middleware
+  context: undefined
 })
 
 app.use(express.urlencoded({ extended: false }));
