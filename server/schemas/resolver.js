@@ -33,7 +33,7 @@ const resolvers = {
             return { token, user };
         },
         saveBook: async (parent, {userEmail, authors, description, bookId, image, link, title}) => {
-            return User.findOneAndUpdate(
+            return await User.findOneAndUpdate(
                 {email: userEmail},
                 {
                     $addToSet: {
@@ -45,6 +45,20 @@ const resolvers = {
                             link,
                             title
                         }
+                    }
+                },
+                {
+                    new: true,
+                    runValidators: true
+                }
+            );
+        },
+        deleteBook: async (parent, {userEmail, bookId}) => {
+            return await User.findOneAndUpdate(
+                {email: userEmail},
+                {
+                    $pull: {
+                        savedBooks: { bookId: bookId }
                     }
                 },
                 {
